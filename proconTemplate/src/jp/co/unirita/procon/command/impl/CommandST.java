@@ -20,7 +20,7 @@ public class CommandST extends Command {
 	public void check(String[] args) {
 		// ‘æˆêˆø”‚ª0‚©1‚¾‚Æ‰¼’è‚·‚é
 		if(args.length < 1 || (!args[0].equals("0") && !args[0].equals("1"))) {
-			super.addErrorResult(ResultCode.PCON_E_002);
+			super.addCheckError(ResultCode.PCON_E_002);
 		}
 	}
 	

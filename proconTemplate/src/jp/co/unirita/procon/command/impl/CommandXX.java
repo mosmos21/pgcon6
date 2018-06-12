@@ -20,11 +20,11 @@ public class CommandXX extends Command {
 	public void check(String[] args) {
 		// ‘æ1ˆø”‚ª0‚©1‚¾‚Æ‰¼’è‚·‚é
 		if(args.length < 1 || (!args[0].equals("0") && !args[0].equals("1"))) {
-			super.addErrorResult(ResultCode.PCON_E_002);
+			super.addCheckError(ResultCode.PCON_E_002);
 		}
 		// ‘æ2ˆø”‚ª2‚©3‚¾‚Æ‰¼’è‚·‚é
 		if(args.length < 2 || (!args[1].equals("2") && !args[1].equals("3"))) {
-			super.addErrorResult(ResultCode.PCON_E_003);
+			super.addCheckError(ResultCode.PCON_E_003);
 		}
 	}
 

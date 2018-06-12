@@ -51,8 +51,12 @@ public abstract class Command {
 		return checkErrorResultList.size() == 0;
 	}
 	
-	public void addErrorResult(int resultCode) {
+	public void addCheckError(int resultCode) {
 		checkErrorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
+	}
+	
+	public void addEvalError(int resultCode) {
+		evalErrorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
 	}
 	
 	public abstract String getCommandString();
