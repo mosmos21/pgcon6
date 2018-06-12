@@ -10,11 +10,13 @@ import jp.co.unirita.procon.result.ResultCode;
 public abstract class Command {
 	
 	private final int line;
-	private List<Result> errorResultList;
+	private List<Result> checkErrorResultList;
+	private List<Result> evalErrorResultList;
 	
 	public Command(int line) {
 		this.line = line;
-		this.errorResultList = new ArrayList<>();
+		this.checkErrorResultList = new ArrayList<>();
+		this.evalErrorResultList = new ArrayList<>();
 	}
 	
 	public int getLine() {
@@ -23,10 +25,14 @@ public abstract class Command {
 	
 	public Result execute(String args[]) throws AssebleException {
 		this.check(args);
-		if(0 < errorResultList.size()) {
-			throw new AssebleException(errorResultList);
+		if(0 < checkErrorResultList.size()) {
+			throw new AssebleException(checkErrorResultList);
 		}
-		return this.eval(args);
+		Result evalResult = this.eval(args);
+		if(!evalResult.isSuccess()) {
+			throw new AssebleException(evalErrorResultList);
+		}
+		return evalResult;
 	}
 
 	public Result success() {
@@ -42,18 +48,14 @@ public abstract class Command {
 	}
 	
 	public boolean isSuccess() {
-		return errorResultList.size() == 0;
-	}
-	
-	public int getErrorResultSize() {
-		return this.errorResultList.size();
+		return checkErrorResultList.size() == 0;
 	}
 	
 	public void addErrorResult(int resultCode) {
-		errorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
+		checkErrorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
 	}
 	
 	public abstract String getCommandString();
 	public abstract void check(String[] args);
-	public abstract Result eval(String[] args) throws AssebleException;
+	public abstract Result eval(String[] args);
 }

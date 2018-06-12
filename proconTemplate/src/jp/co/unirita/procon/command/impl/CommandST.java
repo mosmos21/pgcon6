@@ -25,7 +25,7 @@ public class CommandST extends Command {
 	}
 	
 	@Override
-	public Result eval(String[] args) throws AssebleException {
+	public Result eval(String[] args){
 		return super.success("STコマンドを実行しました");
 	}
 
