@@ -16,9 +16,8 @@ public class CommandED extends Command {
 	}
 
 	@Override
-	public Result check(String[] args){
+	public void check(String[] args){
 		// 引数0なので特にチェックなし
-		return super.success();
 	}
 
 	@Override

@@ -17,12 +17,11 @@ public class CommandST extends Command {
 	}
 
 	@Override
-	public Result check(String[] args) {
+	public void check(String[] args) {
 		// ‘æˆêˆø”‚ª0‚©1‚¾‚Æ‰¼’è‚·‚é
 		if(args.length < 1 || (!args[0].equals("0") && !args[0].equals("1"))) {
 			super.addErrorResult(ResultCode.PCON_E_002);
 		}
-		return super.isSuccess() ? super.success() : super.error();
 	}
 	
 	@Override

@@ -22,8 +22,8 @@ public abstract class Command {
 	}
 	
 	public Result execute(String args[]) throws AssebleException {
-		Result checkResult = this.check(args);
-		if(!checkResult.isSuccess()) {
+		this.check(args);
+		if(0 < errorResultList.size()) {
 			throw new AssebleException(errorResultList);
 		}
 		return this.eval(args);
@@ -45,11 +45,15 @@ public abstract class Command {
 		return errorResultList.size() == 0;
 	}
 	
+	public int getErrorResultSize() {
+		return this.errorResultList.size();
+	}
+	
 	public void addErrorResult(int resultCode) {
 		errorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
 	}
 	
 	public abstract String getCommandString();
-	public abstract Result check(String[] args);
+	public abstract void check(String[] args);
 	public abstract Result eval(String[] args) throws AssebleException;
 }
