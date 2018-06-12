@@ -19,7 +19,7 @@ public class CommandST extends Command {
 	@Override
 	public Result check(String[] args) {
 		// 第一引数が0か1だと仮定する
-		if(args.length < 1 || (args[0] != "0" && args[0] != "1")) {
+		if(args.length < 1 || (!args[0].equals("0") && !args[0].equals("1"))) {
 			super.addErrorResult(ResultCode.PCON_E_002);
 		}
 		return super.isSuccess() ? super.success() : super.error();
@@ -27,8 +27,7 @@ public class CommandST extends Command {
 	
 	@Override
 	public Result eval(String[] args) throws AssebleException {
-		System.out.println("STコマンドが実行されました");
-		return super.success();
+		return super.success("STコマンドを実行しました");
 	}
 
 	

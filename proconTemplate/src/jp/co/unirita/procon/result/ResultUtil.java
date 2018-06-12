@@ -1,6 +1,5 @@
 package jp.co.unirita.procon.result;
 
-import java.awt.image.PackedColorModel;
 import java.util.HashMap;
 import java.util.Map;
 

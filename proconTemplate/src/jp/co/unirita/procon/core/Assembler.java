@@ -49,16 +49,18 @@ public class Assembler{
 	}
 	
 	private long eval(List<String> cmdList) {
-		for(int line = 1; line < cmdList.size(); line++) {
-			String cmdStr = cmdList.get(line);
-			if(cmdStr.startsWith("#")) {
+		for(int line = 1; line <= cmdList.size(); ++line) {
+			String cmdStr = cmdList.get(line - 1);
+			if(cmdStr.equals("") || cmdStr.startsWith("#")) {
 				continue;
 			}
-			String[] ss = cmdStr.split(" ");
+			String[] ss = cmdStr.split("[\\s]+");
+			String cmd = ss[0].toUpperCase();
+			String[] args = Arrays.copyOfRange(ss, 1, ss.length);
 			try {
-				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + ss[0].toUpperCase());
+				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
 				Command command = (Command)clazz.getConstructor(int.class).newInstance(line);
-				Result success = command.execute(Arrays.copyOfRange(ss, 1, ss.length));
+				Result success = command.execute(args);
 				Display.printSuccessMessage(success.getLine(), success.getMessage());
 			}catch (ClassNotFoundException e) {
 				Display.printErrorMessage(ResultCode.PCON_E_000, line);

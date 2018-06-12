@@ -1,16 +1,14 @@
 package jp.co.unirita.procon.command.impl;
 
-import jp.co.unirita.procon.cache.CommandLogCache;
 import jp.co.unirita.procon.command.Command;
-import jp.co.unirita.procon.core.Listner;
 import jp.co.unirita.procon.exception.AssebleException;
 import jp.co.unirita.procon.result.Result;
 import jp.co.unirita.procon.result.ResultCode;
 
 public class CommandXX extends Command {
 	
-	public CommandXX(Listner listner, int line) {
-		super(listner, line);
+	public CommandXX(int line) {
+		super(line);
 	}
 	
 	@Override
@@ -19,20 +17,21 @@ public class CommandXX extends Command {
 	}
 
 	@Override
-	public Result check(String[] args) throws AssebleException {
-		if(CommandLogCache.getLastEvalLine("ST") == -1) {
-			throw new AssebleException(super.error(ResultCode.PCON_E_004));
+	public Result check(String[] args) {
+		// 第1引数が0か1だと仮定する
+		if(args.length < 1 || (!args[0].equals("0") && !args[0].equals("1"))) {
+			super.addErrorResult(ResultCode.PCON_E_002);
 		}
-		if(args.length < 2) {
-			throw new AssebleException(super.error(ResultCode.PCON_E_001));
+		// 第2引数が2か3だと仮定する
+		if(args.length < 2 || (!args[1].equals("2") && !args[1].equals("3"))) {
+			super.addErrorResult(ResultCode.PCON_E_003);
 		}
-		return super.success();
+		return super.isSuccess() ? super.success() : super.error();
 	}
 
 	@Override
 	public Result eval(String[] args) throws AssebleException {
-		System.out.println("XXコマンドを実行したよ！");
-		return super.success();
+		return super.success("XXコマンドを実行しました");
 	}
 
 }
