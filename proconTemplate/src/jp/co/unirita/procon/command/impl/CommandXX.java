@@ -11,7 +11,7 @@ public class CommandXX extends AbstractCommand {
 	}
 
 	@Override
-	public String getCommandString() {
+	public String getCommandName() {
 		return "XX";
 	}
 

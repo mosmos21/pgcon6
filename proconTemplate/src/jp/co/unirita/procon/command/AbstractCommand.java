@@ -33,26 +33,26 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	protected Result success() {
-		return new Result(this.line, this.getCommandString(), ResultCode.PCON_I_000);
+		return new Result(this.line, this.getCommandName(), ResultCode.PCON_I_000);
 	}
 
 	protected Result success(String message) {
-		return new Result(this.line, this.getCommandString(), ResultCode.PCON_I_000, message);
+		return new Result(this.line, this.getCommandName(), ResultCode.PCON_I_000, message);
 	}
 
 	protected Result error() {
-		return new Result(this.line, this.getCommandString(), ResultCode.PCON_E_001);
+		return new Result(this.line, this.getCommandName(), ResultCode.PCON_E_001);
 	}
 
 	protected void addCheckError(int resultCode) {
-		checkErrorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
+		checkErrorResultList.add(new Result(this.line, this.getCommandName(), resultCode));
 	}
 
 	protected void addEvalError(int resultCode) {
-		evalErrorResultList.add(new Result(this.line, this.getCommandString(), resultCode));
+		evalErrorResultList.add(new Result(this.line, this.getCommandName(), resultCode));
 	}
 
-	protected abstract String getCommandString();
+	protected abstract String getCommandName();
 
 	protected abstract void check(String[] args);
 

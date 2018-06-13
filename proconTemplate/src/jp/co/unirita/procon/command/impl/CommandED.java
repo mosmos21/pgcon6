@@ -10,7 +10,7 @@ public class CommandED extends AbstractCommand {
 	}
 
 	@Override
-	public String getCommandString() {
+	public String getCommandName() {
 		return "ED";
 	}
 
