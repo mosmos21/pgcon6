@@ -36,11 +36,43 @@ public class Assembler{
 	
 	private List<String> load(InputStream is) throws AssebleException {
 		List<String> list = new ArrayList<>();
+		State state = State.NONE;
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
 			String line;
+			int idx = 0;
 			while((line = br.readLine()) != null) {
+				idx++;
+				line = line.trim();
+				switch (state) {
+				case NONE:
+					if(line.substring(0, 2).toUpperCase().equals("ST")) {
+						state = State.ST;
+					}else if(!isBrankOrComment(line)) {
+						throw new AssebleException(new Result(idx, "", ResultCode.PCON_E_999));
+					}
+					break;
+				case ST:
+					if(line.substring(0, 2).toUpperCase().startsWith("ED")) {
+						state = State.ED;
+					}else if(!isBrankOrComment(line)) {
+						state = State.COMMAND;
+					}
+					break;
+				case COMMAND:
+					if(line.substring(0, 2).toUpperCase().equals("ED")) {
+						state = State.ED;
+					}
+					break;
+				case ED:
+					if(!isBrankOrComment(line)) {
+						throw new AssebleException(new Result(idx, "", ResultCode.PCON_E_999));
+					}
+				}
+				
 				list.add(line.trim());
-				// TODO STコマンドとEDコマンドのチェック
+			}
+			if(state != State.ED) {
+				throw new AssebleException(new Result(idx, "", ResultCode.PCON_E_999));
 			}
 		}catch (IOException e) {
 			e.printStackTrace();
@@ -51,7 +83,7 @@ public class Assembler{
 	private long eval(List<String> cmdList) {
 		for(int line = 1; line <= cmdList.size(); ++line) {
 			String cmdStr = cmdList.get(line - 1);
-			if(cmdStr.equals("") || cmdStr.startsWith("#")) {
+			if(isBrankOrComment(cmdStr)) {
 				continue;
 			}
 			String[] ss = cmdStr.split("[\\s]+");
@@ -63,7 +95,7 @@ public class Assembler{
 				Result success = command.execute(args);
 				Display.printSuccessMessage(success.getLine(), success.getMessage());
 			}catch (ClassNotFoundException e) {
-				Display.printErrorMessage(ResultCode.PCON_E_000, line);
+				Display.printErrorMessage(ResultCode.PCON_E_999, line);
 			}catch (AssebleException e) {
 				for(Result result : e.getResultList()) {
 					Display.printErrorMessage(result.getResultCode(), result.getLine(), result.getMessage());
@@ -73,5 +105,9 @@ public class Assembler{
 			}
 		}
 		return System.currentTimeMillis();
+	}
+	
+	private boolean isBrankOrComment(String line) {
+		return line.equals("") || line.startsWith("#");
 	}
 }
