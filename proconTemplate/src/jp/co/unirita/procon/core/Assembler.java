@@ -43,32 +43,9 @@ public class Assembler {
 			while ((line = br.readLine()) != null) {
 				idx++;
 				line = line.trim();
-				switch (state) {
-				case NONE:
-					if (line.substring(0, 2).toUpperCase().equals("ST")) {
-						state = State.ST;
-					} else if (!isBrankOrComment(line)) {
-						throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
-					}
-					break;
-				case ST:
-					if (line.substring(0, 2).toUpperCase().startsWith("ED")) {
-						state = State.ED;
-					} else if (!isBrankOrComment(line)) {
-						state = State.COMMAND;
-					}
-					break;
-				case COMMAND:
-					if (line.substring(0, 2).toUpperCase().equals("ED")) {
-						state = State.ED;
-					}
-					break;
-				case ED:
-					if (!isBrankOrComment(line)) {
-						throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
-					}
+				if (!isBrankOrComment(line)) {
+					state = validateState(idx, state, line);
 				}
-
 				list.add(line.trim());
 			}
 			if (state != State.ED) {
@@ -109,5 +86,27 @@ public class Assembler {
 
 	private boolean isBrankOrComment(String line) {
 		return line.equals("") || line.startsWith("#");
+	}
+
+	private State validateState(int idx, State state, String line) throws CommandExecException {
+		String command = line.split("[\\s]+")[0];
+		if(state == State.NONE) {
+			if(command.equals("ST")) {
+				state = State.ST;
+			} else {
+				// TODO STコマンドより前にコマンドが実行されている
+				throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999)); 
+			}
+		} else if(state == State.ST) {
+			state = command.equals("ED") ? State.ED : State.COMMAND;
+		} else if(state == State.COMMAND) {
+			if(command.equals("ED")) {
+				state = State.ED;
+			}
+		} else if(state == State.ED){
+			// TODO EDコマンドより後にコマンドが実行されている
+			throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999)); 
+		}
+		return state;
 	}
 }
