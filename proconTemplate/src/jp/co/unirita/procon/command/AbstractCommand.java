@@ -3,7 +3,7 @@ package jp.co.unirita.procon.command;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.co.unirita.procon.exception.AssebleException;
+import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
 import jp.co.unirita.procon.result.ResultCode;
 
@@ -20,14 +20,14 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public Result execute(String args[]) throws AssebleException {
+	public Result execute(String args[]) throws CommandExecException {
 		this.check(args);
 		if (0 < checkErrorResultList.size()) {
-			throw new AssebleException(checkErrorResultList);
+			throw new CommandExecException(checkErrorResultList);
 		}
 		Result evalResult = this.eval(args);
 		if (!evalResult.isSuccess()) {
-			throw new AssebleException(evalErrorResultList);
+			throw new CommandExecException(evalErrorResultList);
 		}
 		return evalResult;
 	}

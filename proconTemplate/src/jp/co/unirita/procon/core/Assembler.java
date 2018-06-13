@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import jp.co.unirita.procon.command.Command;
-import jp.co.unirita.procon.exception.AssebleException;
+import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
 import jp.co.unirita.procon.result.ResultCode;
 
@@ -26,7 +26,7 @@ public class Assembler {
 		try {
 			List<String> cmdList = assembler.load(is);
 			end = assembler.eval(cmdList);
-		} catch (AssebleException e) {
+		} catch (CommandExecException e) {
 			for (Result result : e.getResultList()) {
 				Display.printErrorMessage(result.getResultCode(), result.getLine());
 			}
@@ -34,7 +34,7 @@ public class Assembler {
 		return end - start;
 	}
 
-	private List<String> load(InputStream is) throws AssebleException {
+	private List<String> load(InputStream is) throws CommandExecException {
 		List<String> list = new ArrayList<>();
 		State state = State.NONE;
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
@@ -48,7 +48,7 @@ public class Assembler {
 					if (line.substring(0, 2).toUpperCase().equals("ST")) {
 						state = State.ST;
 					} else if (!isBrankOrComment(line)) {
-						throw new AssebleException(new Result(idx, "", ResultCode.PCON_E_999));
+						throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
 					}
 					break;
 				case ST:
@@ -65,14 +65,14 @@ public class Assembler {
 					break;
 				case ED:
 					if (!isBrankOrComment(line)) {
-						throw new AssebleException(new Result(idx, "", ResultCode.PCON_E_999));
+						throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
 					}
 				}
 
 				list.add(line.trim());
 			}
 			if (state != State.ED) {
-				throw new AssebleException(new Result(idx, "", ResultCode.PCON_E_999));
+				throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -96,7 +96,7 @@ public class Assembler {
 				Display.printSuccessMessage(success.getLine(), success.getMessage());
 			} catch (ClassNotFoundException e) {
 				Display.printErrorMessage(ResultCode.PCON_E_999, line);
-			} catch (AssebleException e) {
+			} catch (CommandExecException e) {
 				for (Result result : e.getResultList()) {
 					Display.printErrorMessage(result.getResultCode(), result.getLine(), result.getMessage());
 				}
