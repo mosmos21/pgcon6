@@ -1,5 +1,6 @@
 package jp.co.unirita.procon.exception;
 
+import java.util.Arrays;
 import java.util.List;
 
 import jp.co.unirita.procon.result.Result;
@@ -12,6 +13,10 @@ public class AssebleException extends Exception {
 	public AssebleException(List<Result> list) {
 		super();
 		this.resultList = list;
+	}
+	
+	public AssebleException(Result result) {
+		this(Arrays.asList(result));
 	}
 	
 	public List<Result> getResultList() {
