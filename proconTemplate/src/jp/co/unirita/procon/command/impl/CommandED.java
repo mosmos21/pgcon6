@@ -1,9 +1,9 @@
 package jp.co.unirita.procon.command.impl;
 
-import jp.co.unirita.procon.command.Command;
+import jp.co.unirita.procon.command.AbstractCommand;
 import jp.co.unirita.procon.result.Result;
 
-public class CommandED extends Command {
+public class CommandED extends AbstractCommand {
 	
 	public CommandED(int line) {
 		super(line);
