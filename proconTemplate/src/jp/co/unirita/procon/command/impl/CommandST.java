@@ -1,7 +1,6 @@
 package jp.co.unirita.procon.command.impl;
 
 import jp.co.unirita.procon.command.Command;
-import jp.co.unirita.procon.exception.AssebleException;
 import jp.co.unirita.procon.result.Result;
 import jp.co.unirita.procon.result.ResultCode;
 
