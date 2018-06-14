@@ -22,11 +22,7 @@ public class Result {
 		return this.resultCode == ResultCode.PCON_I_000;
 	}
 
-	public int getRow() {
-		return this.row;
-	}
-
-	public String getCommand() {
+	public String getCommandName() {
 		return this.command;
 	}
 
@@ -34,7 +30,11 @@ public class Result {
 		return this.resultCode;
 	}
 
-	public String getMessage() {
-		return this.message;
+	public String getHeader() {
+		return row + "s–Ú";
+	}
+
+	public String getBody() {
+		return message;
 	}
 }

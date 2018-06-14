@@ -6,15 +6,18 @@ import java.util.List;
 import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
 import jp.co.unirita.procon.result.ResultCode;
+import jp.co.unirita.procon.result.error.ArgumentError;
+import jp.co.unirita.procon.result.error.CommandError;
+import jp.co.unirita.procon.result.error.EvalError;
 
 public abstract class AbstractCommand implements Command {
 
-	private final int line;
+	private final int row;
 	private List<Result> checkErrorResultList;
 	private List<Result> evalErrorResultList;
 
-	public AbstractCommand(int line) {
-		this.line = line;
+	public AbstractCommand(int row) {
+		this.row = row;
 		this.checkErrorResultList = new ArrayList<>();
 		this.evalErrorResultList = new ArrayList<>();
 	}
@@ -33,23 +36,23 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	protected Result success() {
-		return new Result(this.line, this.getCommandName(), ResultCode.PCON_I_000);
+		return new Result(this.row, this.getCommandName(), ResultCode.PCON_I_000);
 	}
 
 	protected Result success(String message) {
-		return new Result(this.line, this.getCommandName(), ResultCode.PCON_I_000, message);
+		return new Result(this.row, this.getCommandName(), ResultCode.PCON_I_000, message);
 	}
 
 	protected Result error() {
-		return new Result(this.line, this.getCommandName(), ResultCode.PCON_E_001);
+		return new CommandError(this.row, this.getCommandName(), ResultCode.PCON_E_001);
 	}
 
-	protected void addCheckError(int resultCode) {
-		checkErrorResultList.add(new Result(this.line, this.getCommandName(), resultCode));
+	protected void addCheckError(int argOrdinal, int resultCode) {
+		checkErrorResultList.add(new ArgumentError(this.row, argOrdinal, this.getCommandName(), resultCode));
 	}
 
 	protected void addEvalError(int resultCode) {
-		evalErrorResultList.add(new Result(this.line, this.getCommandName(), resultCode));
+		evalErrorResultList.add(new EvalError(this.row, this.getCommandName(), resultCode));
 	}
 
 	protected abstract String getCommandName();

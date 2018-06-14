@@ -12,6 +12,8 @@ import jp.co.unirita.procon.command.Command;
 import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
 import jp.co.unirita.procon.result.ResultCode;
+import jp.co.unirita.procon.result.ResultUtil;
+import jp.co.unirita.procon.result.error.CommandError;
 
 public class Assembler {
 
@@ -27,7 +29,7 @@ public class Assembler {
 			end = assembler.eval(assembler.load(is));
 		} catch (CommandExecException e) {
 			for (Result result : e.getResultList()) {
-				Display.printErrorMessage(result.getResultCode(), result.getRow());
+				Display.printErrorMessage(result.getResultCode(), result.getHeader(), result.getBody());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -76,12 +78,13 @@ public class Assembler {
 				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
 				Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
 				Result success = command.execute(args);
-				Display.printSuccessMessage(success.getRow(), success.getMessage());
+				Display.printSuccessMessage(success.getHeader(), success.getBody());
 			} catch (ClassNotFoundException e) {
-				Display.printErrorMessage(ResultCode.PCON_E_999, row);
+				// TODO コマンドが未定義
+				Display.printErrorMessage(ResultCode.PCON_E_999, row + "行目", ResultUtil.getResultMessage(ResultCode.PCON_E_999));
 			} catch (CommandExecException e) {
 				for (Result result : e.getResultList()) {
-					Display.printErrorMessage(result.getResultCode(), result.getRow(), result.getMessage());
+					Display.printErrorMessage(result.getResultCode(), result.getHeader(), result.getBody());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -100,7 +103,7 @@ public class Assembler {
 				state = State.ST;
 			} else {
 				// TODO STコマンドより前にコマンドが実行されている
-				throw new CommandExecException(new Result(row, command, ResultCode.PCON_E_999));
+				throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_999));
 			}
 		} else if (state == State.ST) {
 			state = command.equals("ED") ? State.ED : State.COMMAND;
@@ -110,7 +113,7 @@ public class Assembler {
 			}
 		} else if (state == State.ED) {
 			// TODO EDコマンドより後にコマンドが実行されている
-			throw new CommandExecException(new Result(row, command, ResultCode.PCON_E_999));
+			throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_999));
 		}
 		return state;
 	}

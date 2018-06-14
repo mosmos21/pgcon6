@@ -1,19 +1,13 @@
 package jp.co.unirita.procon.core;
 
-import jp.co.unirita.procon.result.ResultUtil;
-
 public class Display {
 
-	public static void printErrorMessage(int resultCode, int line) {
-		printErrorMessage(resultCode, line, ResultUtil.getResultMessage(resultCode));
+	public static void printErrorMessage(int resultCode, String header, String body) {
+		System.out.printf("ERR%03d [%s] %s", resultCode, header, body);
 	}
 
-	public static void printErrorMessage(int resultCode, int line, String message) {
-		System.out.printf("ERR%03d %3dçsñ⁄: %s\n", resultCode, line, message);
-	}
-
-	public static void printSuccessMessage(int line, String message) {
-		System.out.printf("OK %3dçsñ⁄: %s\n", line, message);
+	public static void printSuccessMessage(String header, String body) {
+		System.out.printf("OK [%s] %s\n", header, body);
 	}
 
 	public static void printMessage(String message) {
