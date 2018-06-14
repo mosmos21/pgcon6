@@ -44,7 +44,7 @@ public class Assembler {
 				idx++;
 				line = line.trim();
 				if (!isBrankOrComment(line)) {
-					state = validateState(idx, state, line);
+					state = getNextState(idx, state, line);
 				}
 				list.add(line.trim());
 			}
@@ -88,7 +88,7 @@ public class Assembler {
 		return line.equals("") || line.startsWith("#");
 	}
 
-	private State validateState(int idx, State state, String line) throws CommandExecException {
+	private State getNextState(int idx, State state, String line) throws CommandExecException {
 		String command = line.split("[\\s]+")[0];
 		if(state == State.NONE) {
 			if(command.equals("ST")) {
