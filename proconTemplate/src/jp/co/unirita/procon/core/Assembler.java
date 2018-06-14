@@ -42,16 +42,16 @@ public class Assembler {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String line = null;
 		String[] cmdArr = null;
-		int idx = 0;
+		int row = 0;
 		while ((line = br.readLine()) != null) {
-			idx++;
+			++row;
 			line = line.trim();
 			if (isBrankOrComment(line)) {
 				cmdArr = new String[] { line };
 			} else {
 				cmdArr = line.split("[\\s]+");
 				cmdArr[0] = cmdArr[0].toUpperCase();
-				state = getNextState(idx, state, cmdArr[0]);
+				state = getNextState(row, state, cmdArr[0]);
 			}
 			list.add(cmdArr);
 		}
@@ -59,7 +59,7 @@ public class Assembler {
 		
 		if (state != State.ED) {
 			// TODO EDコマンドが記述されていない
-			throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
+			throw new CommandExecException(new Result(row, "", ResultCode.PCON_E_999));
 		}
 		return list;
 	}
@@ -94,13 +94,13 @@ public class Assembler {
 		return line.equals("") || line.startsWith("#");
 	}
 
-	private State getNextState(int idx, State state, String command) throws CommandExecException {
+	private State getNextState(int row, State state, String command) throws CommandExecException {
 		if (state == State.NONE) {
 			if (command.equals("ST")) {
 				state = State.ST;
 			} else {
 				// TODO STコマンドより前にコマンドが実行されている
-				throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999));
+				throw new CommandExecException(new Result(row, command, ResultCode.PCON_E_999));
 			}
 		} else if (state == State.ST) {
 			state = command.equals("ED") ? State.ED : State.COMMAND;
@@ -110,7 +110,7 @@ public class Assembler {
 			}
 		} else if (state == State.ED) {
 			// TODO EDコマンドより後にコマンドが実行されている
-			throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999));
+			throw new CommandExecException(new Result(row, command, ResultCode.PCON_E_999));
 		}
 		return state;
 	}
