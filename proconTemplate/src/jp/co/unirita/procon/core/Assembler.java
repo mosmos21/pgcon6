@@ -36,6 +36,9 @@ public class Assembler {
 		}
 		return end - start;
 	}
+	
+	private Assembler () {
+	}
 
 	private List<String[]> load(InputStream is) throws CommandExecException, IOException {		
 		List<String[]> list = new ArrayList<>();
