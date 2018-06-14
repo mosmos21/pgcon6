@@ -24,48 +24,54 @@ public class Assembler {
 			assembler = new Assembler();
 		}
 		try {
-			List<String> cmdList = assembler.load(is);
-			end = assembler.eval(cmdList);
+			end = assembler.eval(assembler.load(is));
 		} catch (CommandExecException e) {
 			for (Result result : e.getResultList()) {
 				Display.printErrorMessage(result.getResultCode(), result.getLine());
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return end - start;
 	}
 
-	private List<String> load(InputStream is) throws CommandExecException {
-		List<String> list = new ArrayList<>();
+	private List<String[]> load(InputStream is) throws CommandExecException, IOException {		
+		List<String[]> list = new ArrayList<>();
 		State state = State.NONE;
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-			String line;
-			int idx = 0;
-			while ((line = br.readLine()) != null) {
-				idx++;
-				line = line.trim();
-				if (!isBrankOrComment(line)) {
-					state = getNextState(idx, state, line);
-				}
-				list.add(line.trim());
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String line = null;
+		String[] cmdArr = null;
+		int idx = 0;
+		while ((line = br.readLine()) != null) {
+			idx++;
+			line = line.trim();
+			if (isBrankOrComment(line)) {
+				cmdArr = new String[] { line };
+			} else {
+				cmdArr = line.split("[\\s]+");
+				cmdArr[0] = cmdArr[0].toUpperCase();
+				state = getNextState(idx, state, cmdArr[0]);
 			}
-			if (state != State.ED) {
-				throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			list.add(cmdArr);
+		}
+		br.close();
+		
+		if (state != State.ED) {
+			// TODO EDコマンドが記述されていない
+			throw new CommandExecException(new Result(idx, "", ResultCode.PCON_E_999));
 		}
 		return list;
 	}
 
-	private long eval(List<String> cmdList) {
+	private long eval(List<String[]> cmdList) {
 		for (int line = 1; line <= cmdList.size(); ++line) {
-			String cmdStr = cmdList.get(line - 1);
-			if (isBrankOrComment(cmdStr)) {
+			String[] cmdArr = cmdList.get(line - 1);
+			if (isBrankOrComment(cmdArr[0])) {
 				continue;
 			}
-			String[] ss = cmdStr.split("[\\s]+");
-			String cmd = ss[0].toUpperCase();
-			String[] args = Arrays.copyOfRange(ss, 1, ss.length);
+			String cmd = cmdArr[0];
+			String[] args = Arrays.copyOfRange(cmdArr, 1, cmdArr.length);
 			try {
 				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
 				Command command = (Command) clazz.getConstructor(int.class).newInstance(line);
@@ -88,24 +94,23 @@ public class Assembler {
 		return line.equals("") || line.startsWith("#");
 	}
 
-	private State getNextState(int idx, State state, String line) throws CommandExecException {
-		String command = line.split("[\\s]+")[0];
-		if(state == State.NONE) {
-			if(command.equals("ST")) {
+	private State getNextState(int idx, State state, String command) throws CommandExecException {
+		if (state == State.NONE) {
+			if (command.equals("ST")) {
 				state = State.ST;
 			} else {
 				// TODO STコマンドより前にコマンドが実行されている
-				throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999)); 
+				throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999));
 			}
-		} else if(state == State.ST) {
+		} else if (state == State.ST) {
 			state = command.equals("ED") ? State.ED : State.COMMAND;
-		} else if(state == State.COMMAND) {
-			if(command.equals("ED")) {
+		} else if (state == State.COMMAND) {
+			if (command.equals("ED")) {
 				state = State.ED;
 			}
-		} else if(state == State.ED){
+		} else if (state == State.ED) {
 			// TODO EDコマンドより後にコマンドが実行されている
-			throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999)); 
+			throw new CommandExecException(new Result(idx, command, ResultCode.PCON_E_999));
 		}
 		return state;
 	}
