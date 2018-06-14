@@ -27,7 +27,7 @@ public class Assembler {
 			end = assembler.eval(assembler.load(is));
 		} catch (CommandExecException e) {
 			for (Result result : e.getResultList()) {
-				Display.printErrorMessage(result.getResultCode(), result.getLine());
+				Display.printErrorMessage(result.getResultCode(), result.getRow());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -65,8 +65,8 @@ public class Assembler {
 	}
 
 	private long eval(List<String[]> cmdList) {
-		for (int line = 1; line <= cmdList.size(); ++line) {
-			String[] cmdArr = cmdList.get(line - 1);
+		for (int row = 1; row <= cmdList.size(); ++row) {
+			String[] cmdArr = cmdList.get(row - 1);
 			if (isBrankOrComment(cmdArr[0])) {
 				continue;
 			}
@@ -74,14 +74,14 @@ public class Assembler {
 			String[] args = Arrays.copyOfRange(cmdArr, 1, cmdArr.length);
 			try {
 				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
-				Command command = (Command) clazz.getConstructor(int.class).newInstance(line);
+				Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
 				Result success = command.execute(args);
-				Display.printSuccessMessage(success.getLine(), success.getMessage());
+				Display.printSuccessMessage(success.getRow(), success.getMessage());
 			} catch (ClassNotFoundException e) {
-				Display.printErrorMessage(ResultCode.PCON_E_999, line);
+				Display.printErrorMessage(ResultCode.PCON_E_999, row);
 			} catch (CommandExecException e) {
 				for (Result result : e.getResultList()) {
-					Display.printErrorMessage(result.getResultCode(), result.getLine(), result.getMessage());
+					Display.printErrorMessage(result.getResultCode(), result.getRow(), result.getMessage());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
