@@ -79,8 +79,8 @@ public class Assembler {
 			String[] args = Arrays.copyOfRange(cmdArr, 1, cmdArr.length);
 			try {
 				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
-				Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
-				Result success = command.execute(args);
+				Command command = (Command) clazz.getConstructor(int.class, String[].class).newInstance(row, args);
+				Result success = command.execute();
 				Display.printSuccessMessage(success.getHeader(), success.getBody());
 			} catch (ClassNotFoundException e) {
 				// TODO コマンドが未定義

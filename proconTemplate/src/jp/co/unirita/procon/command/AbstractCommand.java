@@ -13,22 +13,24 @@ import jp.co.unirita.procon.result.error.EvalError;
 public abstract class AbstractCommand implements Command {
 
 	private final int row;
+	private String[] args;
 	private List<Result> checkErrorResultList;
 	private List<Result> evalErrorResultList;
 
-	public AbstractCommand(int row) {
+	public AbstractCommand(int row, String[] args) {
 		this.row = row;
+		this.args = args;
 		this.checkErrorResultList = new ArrayList<>();
 		this.evalErrorResultList = new ArrayList<>();
 	}
 
 	@Override
-	public Result execute(String args[]) throws CommandExecException {
-		this.check(args);
+	public Result execute() throws CommandExecException {
+		this.check(this.args);
 		if (0 < checkErrorResultList.size()) {
 			throw new CommandExecException(checkErrorResultList);
 		}
-		Result evalResult = this.eval(args);
+		Result evalResult = this.eval(this.args);
 		if (!evalResult.isSuccess()) {
 			throw new CommandExecException(evalErrorResultList);
 		}

@@ -6,8 +6,8 @@ import jp.co.unirita.procon.result.ResultCode;
 
 public class CommandST extends AbstractCommand {
 
-	public CommandST(int line) {
-		super(line);
+	public CommandST(int line, String[] args) {
+		super(line, args);
 	}
 
 	@Override
