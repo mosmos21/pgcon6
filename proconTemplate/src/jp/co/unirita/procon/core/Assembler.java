@@ -28,9 +28,7 @@ public class Assembler {
 		try {
 			end = assembler.eval(assembler.load(is));
 		} catch (CommandExecException e) {
-			for (Result result : e.getResultList()) {
-				Display.printErrorMessage(result.getResultCode(), result.getHeader(), result.getBody());
-			}
+			e.getResultList().forEach(Display::printResult);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -80,13 +78,11 @@ public class Assembler {
 				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
 				Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
 				Result success = command.execute(args);
-				Display.printSuccessMessage(success.getHeader(), success.getBody());
+				Display.printResult(success);
 			} catch (ClassNotFoundException e) {
-				Display.printErrorMessage(ResultCode.PCON_E_000, row + "çsñ⁄", ResultUtil.getResultMessage(ResultCode.PCON_E_000));
+				Display.printResult(new CommandError(row, "", ResultCode.PCON_E_000));
 			} catch (CommandExecException e) {
-				for (Result result : e.getResultList()) {
-					Display.printErrorMessage(result.getResultCode(), result.getHeader(), result.getBody());
-				}
+				e.getResultList().forEach(Display::printResult);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
