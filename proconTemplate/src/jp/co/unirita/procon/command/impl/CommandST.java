@@ -11,12 +11,12 @@ public class CommandST extends AbstractCommand {
 	}
 
 	@Override
-	public String getCommandName() {
+	protected String getCommandName() {
 		return "ST";
 	}
 
 	@Override
-	public void check(String[] args) {
+	protected void check(String[] args) {
 		// 第一引数が0か1だと仮定する
 		if (args.length < 1 || (!args[0].equals("0") && !args[0].equals("1"))) {
 			super.addCheckError(1, ResultCode.PCON_E_002);
@@ -24,7 +24,7 @@ public class CommandST extends AbstractCommand {
 	}
 
 	@Override
-	public Result eval(String[] args) {
+	protected Result eval(String[] args) {
 		return super.success("STコマンドを実行しました");
 	}
 

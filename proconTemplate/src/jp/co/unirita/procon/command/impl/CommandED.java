@@ -10,17 +10,17 @@ public class CommandED extends AbstractCommand {
 	}
 
 	@Override
-	public String getCommandName() {
+	protected String getCommandName() {
 		return "ED";
 	}
 
 	@Override
-	public void check(String[] args){
+	protected void check(String[] args){
 		// 引数0なので特にチェックなし
 	}
 
 	@Override
-	public Result eval(String[] args){
+	protected Result eval(String[] args){
 		return super.success("EDコマンドを実行しました");
 	}
 
