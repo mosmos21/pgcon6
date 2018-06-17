@@ -63,7 +63,6 @@ public class Assembler {
 		br.close();
 		
 		if (state != State.ED) {
-			// TODO EDコマンドが記述されていない
 			throw new CommandExecException(new Result(row, "", ResultCode.PCON_E_003));
 		}
 		return list;
@@ -83,7 +82,6 @@ public class Assembler {
 				Result success = command.execute();
 				Display.printSuccessMessage(success.getHeader(), success.getBody());
 			} catch (ClassNotFoundException e) {
-				// TODO コマンドが未定義
 				Display.printErrorMessage(ResultCode.PCON_E_000, row + "行目", ResultUtil.getResultMessage(ResultCode.PCON_E_000));
 			} catch (CommandExecException e) {
 				for (Result result : e.getResultList()) {
