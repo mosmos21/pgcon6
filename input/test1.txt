@@ -1,0 +1,4 @@
+# sample
+ST 1
+XX 1 2
+ED
