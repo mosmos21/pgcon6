@@ -80,7 +80,7 @@ public class Assembler {
 				Result success = command.execute(args);
 				Display.printResult(success);
 			} catch (ClassNotFoundException e) {
-				Display.printResult(new CommandError(row, "", ResultCode.PCON_E_000));
+				Display.printResult(new CommandError(row, cmd, ResultCode.PCON_E_000));
 			} catch (CommandExecException e) {
 				e.getResultList().forEach(Display::printResult);
 			} catch (Exception e) {
