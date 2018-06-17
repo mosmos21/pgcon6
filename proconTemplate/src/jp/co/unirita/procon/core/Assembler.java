@@ -64,7 +64,7 @@ public class Assembler {
 		
 		if (state != State.ED) {
 			// TODO EDコマンドが記述されていない
-			throw new CommandExecException(new Result(row, "", ResultCode.PCON_E_999));
+			throw new CommandExecException(new Result(row, "", ResultCode.PCON_E_003));
 		}
 		return list;
 	}
@@ -84,7 +84,7 @@ public class Assembler {
 				Display.printSuccessMessage(success.getHeader(), success.getBody());
 			} catch (ClassNotFoundException e) {
 				// TODO コマンドが未定義
-				Display.printErrorMessage(ResultCode.PCON_E_999, row + "行目", ResultUtil.getResultMessage(ResultCode.PCON_E_999));
+				Display.printErrorMessage(ResultCode.PCON_E_000, row + "行目", ResultUtil.getResultMessage(ResultCode.PCON_E_000));
 			} catch (CommandExecException e) {
 				for (Result result : e.getResultList()) {
 					Display.printErrorMessage(result.getResultCode(), result.getHeader(), result.getBody());
@@ -105,8 +105,7 @@ public class Assembler {
 			if (command.equals("ST")) {
 				state = State.ST;
 			} else {
-				// TODO STコマンドより前にコマンドが実行されている
-				throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_999));
+				throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_004));
 			}
 		} else if (state == State.ST) {
 			state = command.equals("ED") ? State.ED : State.COMMAND;
@@ -115,8 +114,7 @@ public class Assembler {
 				state = State.ED;
 			}
 		} else if (state == State.ED) {
-			// TODO EDコマンドより後にコマンドが実行されている
-			throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_999));
+			throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_005));
 		}
 		return state;
 	}
