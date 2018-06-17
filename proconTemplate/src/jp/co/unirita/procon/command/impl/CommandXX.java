@@ -6,8 +6,8 @@ import jp.co.unirita.procon.result.ResultCode;
 
 public class CommandXX extends AbstractCommand {
 
-	public CommandXX(int line, String[] args) {
-		super(line, args);
+	public CommandXX(int row) {
+		super(row);
 	}
 
 	@Override
