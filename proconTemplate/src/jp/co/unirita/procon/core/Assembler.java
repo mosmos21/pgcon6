@@ -26,7 +26,7 @@ public class Assembler {
 		try {
 			end = assembler.eval(assembler.load(is));
 		} catch (CommandExecException e) {
-			e.getResultList().forEach(Display::printResult);
+			Display.printResult(e.getResult());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}catch (Exception e) {
@@ -78,7 +78,7 @@ public class Assembler {
 				Result success = command.execute(args);
 				Display.printResult(success);
 			} catch (CommandExecException e) {
-				e.getResultList().forEach(Display::printResult);
+				Display.printResult(e.getResult());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
