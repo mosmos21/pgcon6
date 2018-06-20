@@ -3,12 +3,9 @@ package jp.co.unirita.procon.command;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
-import jp.co.unirita.procon.result.ResultCode;
-import jp.co.unirita.procon.result.error.ArgumentError;
-import jp.co.unirita.procon.result.error.CommandError;
-import jp.co.unirita.procon.result.error.EvalError;
 
 public abstract class AbstractCommand implements Command {
 
@@ -24,38 +21,41 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public Result execute(String[] args) throws CommandExecException {
+//		System.out.println(Arrays.toString(args));
 		this.check(args);
 		if (0 < checkErrorResultList.size()) {
 			throw new CommandExecException(checkErrorResultList);
 		}
 		Result evalResult = this.eval(args);
-		if (!evalResult.isSuccess()) {
+		if (evalResult != null && !evalResult.isSuccess()) {
 			throw new CommandExecException(evalErrorResultList);
 		}
 		return evalResult;
 	}
 
 	protected Result success() {
-		return new Result(this.row, this.getCommandName(), ResultCode.PCON_I_000);
+		return new Result(this.row, this.getCommandName(), 0, 0);
 	}
 
 	protected Result success(String message) {
-		return new Result(this.row, this.getCommandName(), ResultCode.PCON_I_000, message);
+		return new Result(this.row, this.getCommandName(), this.getCommandCode(), 0, message);
 	}
 
-	protected Result error() {
-		return new CommandError(this.row, this.getCommandName(), ResultCode.PCON_E_001);
+	protected Result error(int subCode, String message) {
+		return new Result(this.row, this.getCommandName(), this.getCommandCode(), subCode, message);
 	}
 
-	protected void addCheckError(int argOrdinal, int resultCode) {
-		checkErrorResultList.add(new ArgumentError(this.row, argOrdinal, this.getCommandName(), resultCode));
+	protected void addCheckError(int subCode, String message) {
+		checkErrorResultList.add(new Result(this.row, this.getCommandName(), this.getCommandCode(), subCode, message));
 	}
 
-	protected void addEvalError(int resultCode) {
-		evalErrorResultList.add(new EvalError(this.row, this.getCommandName(), resultCode));
+	protected void addEvalError(int subcode, String message) {
+		evalErrorResultList.add(new Result(this.row, this.getCommandName(), this.getCommandCode(), subcode, message));
 	}
 
 	protected abstract String getCommandName();
+	
+	protected abstract int getCommandCode();
 
 	protected abstract void check(String[] args);
 

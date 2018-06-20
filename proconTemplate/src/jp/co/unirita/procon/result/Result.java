@@ -5,21 +5,27 @@ public class Result {
 	private int row;
 	private String command;
 	private int resultCode;
+	private int subCode;
 	private String message;
 
-	public Result(int row, String command, int resultCode) {
-		this(row, command, resultCode, ResultUtil.getResultMessage(resultCode));
+	public Result(int row, String command, int resultCode, int subCode) {
+		this(row, command, resultCode, subCode, "");
 	}
 
-	public Result(int row, String command, int resultCode, String message) {
+	public Result(int row, String command, int resultCode, int subCode, String message) {
 		this.row = row;
 		this.command = command;
 		this.resultCode = resultCode;
+		this.subCode = subCode;
 		this.message = message;
 	}
 
 	public boolean isSuccess() {
-		return this.resultCode == ResultCode.PCON_I_000;
+		return this.subCode == 0;
+	}
+	
+	public int getRow() {
+		return this.row;
 	}
 
 	public String getCommandName() {
@@ -29,12 +35,12 @@ public class Result {
 	public int getResultCode() {
 		return this.resultCode;
 	}
-
-	public String getHeader() {
-		return row + "çsñ⁄";
+	
+	public int getSubCode() {
+		return this.subCode;
 	}
 
-	public String getBody() {
-		return message;
+	public String getMessage() {
+		return this.message;
 	}
 }

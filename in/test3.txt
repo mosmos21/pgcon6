@@ -1,0 +1,14 @@
+st 7
+ms 0 999999 99
+# sr error 
+sr
+sr 10000000
+sr 00000001
+# sr success
+sr 0
+sr 9999999
+sg 0
+sg 01
+sg 1
+sg 9999999
+ed

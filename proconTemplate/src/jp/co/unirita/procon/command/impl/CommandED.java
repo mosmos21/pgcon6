@@ -1,9 +1,12 @@
 package jp.co.unirita.procon.command.impl;
 
 import jp.co.unirita.procon.command.AbstractCommand;
+import jp.co.unirita.procon.core.Memory;
 import jp.co.unirita.procon.result.Result;
 
 public class CommandED extends AbstractCommand {
+	
+	Memory memory = Memory.getInstance();
 	
 	public CommandED(int row) {
 		super(row);
@@ -11,7 +14,12 @@ public class CommandED extends AbstractCommand {
 
 	@Override
 	protected String getCommandName() {
-		return "ED";
+		return "ed";
+	}
+	
+	@Override
+	protected int getCommandCode() {
+		return 7;
 	}
 
 	@Override
@@ -21,7 +29,7 @@ public class CommandED extends AbstractCommand {
 
 	@Override
 	protected Result eval(String[] args){
-		return super.success("EDコマンドを実行しました");
+		return super.success("" + memory.countValueIsNotUndefined());
 	}
 
 }

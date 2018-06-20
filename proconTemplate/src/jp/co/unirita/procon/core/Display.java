@@ -5,6 +5,9 @@ import jp.co.unirita.procon.result.Result;
 public class Display {
 	
 	public static void printResult(Result result) {
+		if(result == null) {
+			return;
+		}
 		if(result.isSuccess()) {
 			printSuccessMessage(result);
 		} else {
@@ -13,11 +16,11 @@ public class Display {
 	}
 
 	private static void printErrorMessage(Result result) {
-		System.out.printf("ERR%03d [%s] %s\n", result.getResultCode(), result.getHeader(), result.getBody());
+		System.out.printf("L%04d E%02d%02d %s\n", result.getRow(), result.getResultCode(), result.getSubCode(), result.getMessage());
 	}
 
 	private static void printSuccessMessage(Result result) {
-		System.out.printf("OK [%s] %s\n", result.getHeader(), result.getBody());
+		System.out.printf("L%04d I%02d%02d %s\n", result.getRow(), result.getResultCode(), result.getSubCode(), result.getMessage());
 	}
 
 	public static void printMessage(String message) {

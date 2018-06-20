@@ -1,0 +1,16 @@
+st 7
+# ss error 
+ss
+ss 100000000 1
+ss 00000001 1
+ss 1 100
+ss 1 001
+ss 00000001 001
+# ss success
+ss 0 0
+ss 00 99
+ss 9999999 0
+ss 9999999 0
+sg 0
+sg 9999999
+ed

@@ -4,43 +4,52 @@ import jp.co.unirita.procon.command.AbstractCommand;
 import jp.co.unirita.procon.core.Memory;
 import jp.co.unirita.procon.result.Result;
 
-public class CommandST extends AbstractCommand {
+public class CommandSR extends AbstractCommand {
 
-	public CommandST(int row) {
+	Memory memory = Memory.getInstance();
+	
+	public CommandSR(int row) {
 		super(row);
 	}
 
 	@Override
 	protected String getCommandName() {
-		return "st";
+		return "sr";
 	}
 	
 	@Override
 	protected int getCommandCode() {
-		return 0;
+		return 2;
 	}
 
 	@Override
 	protected void check(String[] args) {
 		String cmdString = this.getCommandName() + " " + String.join(" ", args);
-		// åÖêîéwíË 10^12Ç‹Ç≈
+		int subCode = 0;
 		if(args.length < 1) {
-			addCheckError(1, cmdString);
+			subCode |= 1;
 		} else {
 			try {
-				long digit = Long.parseLong(args[0]);
-				if(1000000000000L < digit) {
+				if(memory.getMaxDigit() < args[0].length()) {
+					throw new Exception();
+				}
+				int idx = Integer.parseInt(args[0]);
+				if(idx < 0 ||  memory.getMaxSize() < idx) {
 					throw new Exception();
 				}
 			}catch (Exception e) {
-				addCheckError(1, cmdString);
+				subCode |= 1;
 			}
+		}
+		if(0 < subCode) {
+			addCheckError(subCode, cmdString);
 		}
 	}
 
 	@Override
 	protected Result eval(String[] args) {
-		Memory.getInstance().init(Integer.parseInt(args[0]));
+		memory.resetValue(Integer.parseInt(args[0]));
 		return null;
 	}
+
 }

@@ -11,8 +11,6 @@ import java.util.List;
 import jp.co.unirita.procon.command.Command;
 import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
-import jp.co.unirita.procon.result.ResultCode;
-import jp.co.unirita.procon.result.error.CommandError;
 
 public class Assembler {
 
@@ -20,7 +18,7 @@ public class Assembler {
 
 	public static long run(InputStream is) {
 		long start = System.currentTimeMillis();
-		long end = start;
+		long end = start - 1;
 		if (assembler == null) {
 			assembler = new Assembler();
 		}
@@ -30,6 +28,8 @@ public class Assembler {
 			e.getResultList().forEach(Display::printResult);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		return end - start;
 	}
@@ -37,9 +37,8 @@ public class Assembler {
 	private Assembler () {
 	}
 
-	private List<String[]> load(InputStream is) throws CommandExecException, IOException {		
+	private List<String[]> load(InputStream is) throws CommandExecException, IOException, Exception {		
 		List<String[]> list = new ArrayList<>();
-		State state = State.NONE;
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String line = null;
@@ -53,15 +52,16 @@ public class Assembler {
 			} else {
 				cmdArr = line.split("[\\s]+");
 				cmdArr[0] = cmdArr[0].toUpperCase();
-				state = getNextState(row, state, cmdArr[0]);
 			}
-			list.add(cmdArr);
+			if(cmdArr[0].equals("ST")) {
+					Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmdArr[0]);
+					Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
+					command.execute(Arrays.copyOfRange(cmdArr, 1, cmdArr.length));
+			}else {
+				list.add(cmdArr);
+			}
 		}
 		br.close();
-		
-		if (state != State.ED) {
-			throw new CommandExecException(new Result(row, "", ResultCode.PCON_E_003));
-		}
 		return list;
 	}
 
@@ -75,11 +75,11 @@ public class Assembler {
 			String[] args = Arrays.copyOfRange(cmdArr, 1, cmdArr.length);
 			try {
 				Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmd);
-				Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
+				Command command = (Command) clazz.getConstructor(int.class).newInstance(row + 1);
 				Result success = command.execute(args);
 				Display.printResult(success);
 			} catch (ClassNotFoundException e) {
-				Display.printResult(new CommandError(row, cmd, ResultCode.PCON_E_000));
+//				Display.printResult(new CommandError(row, cmd, ResultCode.PCON_E_000));
 			} catch (CommandExecException e) {
 				e.getResultList().forEach(Display::printResult);
 			} catch (Exception e) {
@@ -91,24 +91,5 @@ public class Assembler {
 
 	private boolean isBrankOrComment(String line) {
 		return line.equals("") || line.startsWith("#");
-	}
-
-	private State getNextState(int row, State state, String command) throws CommandExecException {
-		if (state == State.NONE) {
-			if (command.equals("ST")) {
-				state = State.ST;
-			} else {
-				throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_004));
-			}
-		} else if (state == State.ST) {
-			state = command.equals("ED") ? State.ED : State.COMMAND;
-		} else if (state == State.COMMAND) {
-			if (command.equals("ED")) {
-				state = State.ED;
-			}
-		} else if (state == State.ED) {
-			throw new CommandExecException(new CommandError(row, command, ResultCode.PCON_E_005));
-		}
-		return state;
 	}
 }
