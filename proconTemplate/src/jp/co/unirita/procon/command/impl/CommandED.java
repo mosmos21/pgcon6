@@ -6,8 +6,6 @@ import jp.co.unirita.procon.result.Result;
 
 public class CommandED extends AbstractCommand {
 	
-	Memory memory = Memory.getInstance();
-	
 	public CommandED(int row) {
 		super(row);
 	}
@@ -29,7 +27,7 @@ public class CommandED extends AbstractCommand {
 
 	@Override
 	protected Result eval(String[] args){
-		return super.success("" + memory.countValueIsNotUndefined());
+		return super.success(String.valueOf(Memory.list.count()));
 	}
 
 }

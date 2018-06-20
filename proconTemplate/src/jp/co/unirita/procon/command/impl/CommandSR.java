@@ -5,8 +5,6 @@ import jp.co.unirita.procon.core.Memory;
 import jp.co.unirita.procon.result.Result;
 
 public class CommandSR extends AbstractCommand {
-
-	Memory memory = Memory.getInstance();
 	
 	public CommandSR(int row) {
 		super(row);
@@ -24,17 +22,18 @@ public class CommandSR extends AbstractCommand {
 
 	@Override
 	protected void check(String[] args) {
+		int digit = String.valueOf(Memory.list.size()).length();
 		String cmdString = this.getCommandName() + " " + String.join(" ", args);
 		int subCode = 0;
 		if(args.length < 1) {
 			subCode |= 1;
 		} else {
 			try {
-				if(memory.getMaxDigit() < args[0].length()) {
+				if(digit < args[0].length()) {
 					throw new Exception();
 				}
 				int idx = Integer.parseInt(args[0]);
-				if(idx < 0 ||  memory.getMaxSize() < idx) {
+				if(idx < 0 ||  digit < idx) {
 					throw new Exception();
 				}
 			}catch (Exception e) {
@@ -48,7 +47,7 @@ public class CommandSR extends AbstractCommand {
 
 	@Override
 	protected Result eval(String[] args) {
-		memory.resetValue(Integer.parseInt(args[0]));
+		Memory.list.remove(Long.parseLong(args[0]));
 		return null;
 	}
 
