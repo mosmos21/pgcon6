@@ -16,13 +16,13 @@ public class CommandED extends AbstractCommand {
 	}
 	
 	@Override
-	protected int getCommandCode() {
+	protected int getCommandNumber() {
 		return 7;
 	}
 
 	@Override
-	protected void check(String[] args){
-		// 引数0なので特にチェックなし
+	protected int check(String[] args){
+		return 0;
 	}
 
 	@Override

@@ -16,33 +16,17 @@ public class CommandSR extends AbstractCommand {
 	}
 	
 	@Override
-	protected int getCommandCode() {
+	protected int getCommandNumber() {
 		return 2;
 	}
 
 	@Override
-	protected void check(String[] args) {
-		int digit = String.valueOf(Memory.list.size()).length();
-		String cmdString = this.getCommandName() + " " + String.join(" ", args);
+	protected int check(String[] args) {
 		int subCode = 0;
-		if(args.length < 1) {
+		if(!super.checkArgValue(args, 0)) {
 			subCode |= 1;
-		} else {
-			try {
-				if(digit < args[0].length()) {
-					throw new Exception();
-				}
-				int idx = Integer.parseInt(args[0]);
-				if(idx < 0 ||  digit < idx) {
-					throw new Exception();
-				}
-			}catch (Exception e) {
-				subCode |= 1;
-			}
 		}
-		if(0 < subCode) {
-			addCheckError(subCode, cmdString);
-		}
+		return subCode;
 	}
 
 	@Override

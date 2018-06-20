@@ -16,49 +16,20 @@ public class CommandMR extends AbstractCommand {
 	}
 	
 	@Override
-	protected int getCommandCode() {
+	protected int getCommandNumber() {
 		return 5;
 	}
 
 	@Override
-	protected void check(String[] args) {
-		int digit = String.valueOf(Memory.list.size()).length();
-		String cmdString = this.getCommandName() + " " + String.join(" ", args);
+	protected int check(String[] args) {
 		int subCode = 0;
-		if(args.length < 1) {
+		if(!super.checkArgIdx(args, 0)) {
 			subCode |= 1;
-		} else {
-			try {
-				if(digit < args[0].length()) {
-					throw new Exception();
-				}
-				int idx = Integer.parseInt(args[0]);
-				if(idx < 0 ||  digit < idx) {
-					throw new Exception();
-				}
-			}catch (Exception e) {
-				subCode |= 1;
-			}
 		}
-		
-		if(args.length < 2) {
+		if(!super.checkArgIdx(args, 1)) {
 			subCode |= 2;
-		} else {
-			try {
-				if(digit < args[1].length()) {
-					throw new Exception();
-				}
-				int idx = Integer.parseInt(args[1]);
-				if(idx < 0 || digit < idx) {
-					throw new Exception();
-				}
-			}catch (Exception e) {
-				subCode |= 2;
-			}
 		}
-		if(0 < subCode) {
-			addCheckError(subCode, cmdString);
-		}
+		return subCode;
 	}
 
 	@Override

@@ -1,34 +1,29 @@
 package jp.co.unirita.procon.command;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
+import jp.co.unirita.procon.core.Memory;
 import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
 
 public abstract class AbstractCommand implements Command {
 
 	private final int row;
-	private List<Result> checkErrorResultList;
-	private List<Result> evalErrorResultList;
+	private String commandLine;
 
 	public AbstractCommand(int row) {
 		this.row = row;
-		this.checkErrorResultList = new ArrayList<>();
-		this.evalErrorResultList = new ArrayList<>();
+		commandLine = this.getCommandName();
 	}
 
 	@Override
 	public Result execute(String[] args) throws CommandExecException {
-//		System.out.println(Arrays.toString(args));
-		this.check(args);
-		if (0 < checkErrorResultList.size()) {
-			throw new CommandExecException(checkErrorResultList);
+		commandLine += " " + String.join(" ", args);
+		int subCode = this.check(args);
+		if (0 < subCode) {
+			throw new CommandExecException(new Result(this.row, this.getCommandName(), this.getCommandNumber(), subCode, commandLine));
 		}
 		Result evalResult = this.eval(args);
 		if (evalResult != null && !evalResult.isSuccess()) {
-			throw new CommandExecException(evalErrorResultList);
+			throw new CommandExecException(evalResult);
 		}
 		return evalResult;
 	}
@@ -38,26 +33,37 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	protected Result success(String message) {
-		return new Result(this.row, this.getCommandName(), this.getCommandCode(), 0, message);
+		return new Result(this.row, this.getCommandName(), this.getCommandNumber(), 0, message);
 	}
-
-	protected Result error(int subCode, String message) {
-		return new Result(this.row, this.getCommandName(), this.getCommandCode(), subCode, message);
+	
+	protected boolean checkArgIdx(String[] args, int ordinal) {
+		int digit = String.valueOf(Memory.list.size()).length();
+		if(args.length < ordinal) {
+			return false;
+		}
+		if(digit < args[ordinal].length()) {
+			return false;
+		}
+		long value = Long.parseLong(args[ordinal]);
+		return 0 < value && value < Memory.list.size();
 	}
-
-	protected void addCheckError(int subCode, String message) {
-		checkErrorResultList.add(new Result(this.row, this.getCommandName(), this.getCommandCode(), subCode, message));
-	}
-
-	protected void addEvalError(int subcode, String message) {
-		evalErrorResultList.add(new Result(this.row, this.getCommandName(), this.getCommandCode(), subcode, message));
+	
+	protected boolean checkArgValue(String[] args, int ordinal) {
+		if(args.length < ordinal) {
+			return false;
+		}
+		if(2 < args[ordinal].length()) {
+			return false;
+		}
+		long value = Long.parseLong(args[ordinal]);
+		return 0 <= value && value <= 99;
 	}
 
 	protected abstract String getCommandName();
 	
-	protected abstract int getCommandCode();
+	protected abstract int getCommandNumber();
 
-	protected abstract void check(String[] args);
+	protected abstract int check(String[] args);
 
 	protected abstract Result eval(String[] args);
 }

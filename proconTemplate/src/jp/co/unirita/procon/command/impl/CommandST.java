@@ -16,34 +16,25 @@ public class CommandST extends AbstractCommand {
 	protected String getCommandName() {
 		return "st";
 	}
-	
+
 	@Override
-	protected int getCommandCode() {
+	protected int getCommandNumber() {
 		return 0;
 	}
 
 	@Override
-	protected void check(String[] args) {
-		String cmdString = this.getCommandName() + " " + String.join(" ", args);
-		// Œ…”w’è 10^12‚Ü‚Å
-		if(args.length < 1) {
-			addCheckError(1, cmdString);
-		} else {
-			try {
-				long digit = Long.parseLong(args[0]);
-				if(1000000000000L < digit) {
-					throw new Exception();
-				}
-			}catch (Exception e) {
-				addCheckError(1, cmdString);
-			}
+	protected int check(String[] args) {
+		int subCode = 0;
+		if (args.length < 1 || (!args[0].equals("7") && !args[0].equals("12"))) {
+			subCode |= 1;
 		}
+		return subCode;
 	}
 
 	@Override
 	protected Result eval(String[] args) {
 		int size = Integer.parseInt(args[0]);
-		if(size == 7) {
+		if (size == 7) {
 			Memory.list = new SmallList<>();
 		} else {
 			Memory.list = new LargeList<>();
