@@ -4,20 +4,20 @@ public class Result {
 
 	private int row;
 	private String command;
-	private int resultCode;
+	private int commandNumber;
 	private int subCode;
-	private String message;
+	private String result;
 
-	public Result(int row, String command, int resultCode, int subCode) {
-		this(row, command, resultCode, subCode, "");
+	public Result(int row, String command, int commandNumber, int subCode) {
+		this(row, command, commandNumber, subCode, "");
 	}
 
-	public Result(int row, String command, int resultCode, int subCode, String message) {
+	public Result(int row, String command, int commandNumber, int subCode, String result) {
 		this.row = row;
 		this.command = command;
-		this.resultCode = resultCode;
+		this.commandNumber = commandNumber;
 		this.subCode = subCode;
-		this.message = message;
+		this.result = result;
 	}
 
 	public boolean isSuccess() {
@@ -32,15 +32,15 @@ public class Result {
 		return this.command;
 	}
 
-	public int getResultCode() {
-		return this.resultCode;
+	public int getCommandNumber() {
+		return this.commandNumber;
 	}
 	
 	public int getSubCode() {
 		return this.subCode;
 	}
 
-	public String getMessage() {
-		return this.message;
+	public String getResult() {
+		return this.result;
 	}
 }
