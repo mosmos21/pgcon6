@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import jp.co.unirita.procon.command.Command;
+import jp.co.unirita.procon.command.impl.CommandST;
 import jp.co.unirita.procon.exception.CommandExecException;
 import jp.co.unirita.procon.result.Result;
 
@@ -54,9 +55,7 @@ public class Assembler {
 				cmdArr[0] = cmdArr[0].toUpperCase();
 			}
 			if(cmdArr[0].equals("ST")) {
-					Class<?> clazz = Class.forName("jp.co.unirita.procon.command.impl.Command" + cmdArr[0]);
-					Command command = (Command) clazz.getConstructor(int.class).newInstance(row);
-					command.execute(Arrays.copyOfRange(cmdArr, 1, cmdArr.length));
+					new CommandST(row).execute(Arrays.copyOfRange(cmdArr, 1, cmdArr.length));
 			}else {
 				list.add(cmdArr);
 			}
@@ -78,8 +77,6 @@ public class Assembler {
 				Command command = (Command) clazz.getConstructor(int.class).newInstance(row + 1);
 				Result success = command.execute(args);
 				Display.printResult(success);
-			} catch (ClassNotFoundException e) {
-//				Display.printResult(new CommandError(row, cmd, ResultCode.PCON_E_000));
 			} catch (CommandExecException e) {
 				e.getResultList().forEach(Display::printResult);
 			} catch (Exception e) {
