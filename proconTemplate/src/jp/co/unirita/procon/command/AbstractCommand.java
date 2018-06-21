@@ -45,7 +45,7 @@ public abstract class AbstractCommand implements Command {
 			return false;
 		}
 		long value = Long.parseLong(args[ordinal]);
-		return 0 < value && value < Memory.list.size();
+		return 0 <= value && value < Memory.list.size();
 	}
 	
 	protected boolean checkArgValue(String[] args, int ordinal) {
