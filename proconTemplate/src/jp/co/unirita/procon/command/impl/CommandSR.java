@@ -23,7 +23,7 @@ public class CommandSR extends AbstractCommand {
 	@Override
 	protected int check(String[] args) {
 		int subCode = 0;
-		if(!super.checkArgValue(args, 0)) {
+		if(!super.checkArgIdx(args, 0)) {
 			subCode |= 1;
 		}
 		return subCode;
