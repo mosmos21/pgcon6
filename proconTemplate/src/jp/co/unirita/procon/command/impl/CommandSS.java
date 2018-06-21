@@ -35,7 +35,7 @@ public class CommandSS extends AbstractCommand {
 
 	@Override
 	protected Result eval(String[] args) {
-		Memory.list.set(Long.parseLong(args[0]), Integer.parseInt(args[1]));
+		Memory.list.add(Long.parseLong(args[0]), Integer.parseInt(args[1]));
 		return null;
 	}
 

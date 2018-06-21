@@ -15,10 +15,10 @@ public interface VirtualList<T> {
 	public T[] get(long startIdx, long endIdx);
 	
 	// 指定された位置に値をセットする
-	public void set(long idx, T value);
+	public void add(long idx, T value);
 	
 	// 指定された範囲に値をセットする
-	public void set(long startIdx, long endIdx, T value);
+	public void add(long startIdx, long endIdx, T value);
 	
 	// 指定された添え字でアクセスされる値を削除する
 	public void remove(long idx);

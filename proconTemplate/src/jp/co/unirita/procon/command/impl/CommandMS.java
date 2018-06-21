@@ -40,7 +40,7 @@ public class CommandMS extends AbstractCommand {
 		long arg1 = Long.parseLong(args[0]);
 		long arg2 = Long.parseLong(args[1]);
 		int value = Integer.parseInt(args[2]);
-		Memory.list.set(Math.min(arg1, arg2), Math.max(arg1, arg2), value);
+		Memory.list.add(Math.min(arg1, arg2), Math.max(arg1, arg2), value);
 		return null;
 	}
 

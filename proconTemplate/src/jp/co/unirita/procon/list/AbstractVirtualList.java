@@ -23,10 +23,10 @@ public abstract class AbstractVirtualList<T> implements VirtualList<T> {
 	public abstract T[] get(long startIdx, long endIdx);
 
 	@Override
-	public abstract void set(long idx, T value);
+	public abstract void add(long idx, T value);
 
 	@Override
-	public abstract void set(long startIdx, long endIdx, T value);
+	public abstract void add(long startIdx, long endIdx, T value);
 
 	@Override
 	public abstract void remove(long idx);
