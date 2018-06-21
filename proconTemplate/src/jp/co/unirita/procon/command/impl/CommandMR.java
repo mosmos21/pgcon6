@@ -2,7 +2,7 @@ package jp.co.unirita.procon.command.impl;
 
 import jp.co.unirita.procon.command.AbstractCommand;
 import jp.co.unirita.procon.core.Memory;
-import jp.co.unirita.procon.result.Result;
+import jp.co.unirita.procon.core.Result;
 
 public class CommandMR extends AbstractCommand {
 

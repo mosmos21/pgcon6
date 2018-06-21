@@ -2,9 +2,9 @@ package jp.co.unirita.procon.command.impl;
 
 import jp.co.unirita.procon.command.AbstractCommand;
 import jp.co.unirita.procon.core.Memory;
+import jp.co.unirita.procon.core.Result;
 import jp.co.unirita.procon.list.impl.LargeList;
 import jp.co.unirita.procon.list.impl.SmallList;
-import jp.co.unirita.procon.result.Result;
 
 public class CommandST extends AbstractCommand {
 

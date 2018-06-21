@@ -1,7 +1,5 @@
 package jp.co.unirita.procon.core;
 
-import jp.co.unirita.procon.result.Result;
-
 public class Display {
 	
 	public static void printResult(Result result) {

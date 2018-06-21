@@ -11,7 +11,6 @@ import java.util.List;
 import jp.co.unirita.procon.command.Command;
 import jp.co.unirita.procon.command.impl.CommandST;
 import jp.co.unirita.procon.exception.CommandExecException;
-import jp.co.unirita.procon.result.Result;
 
 public class Assembler {
 

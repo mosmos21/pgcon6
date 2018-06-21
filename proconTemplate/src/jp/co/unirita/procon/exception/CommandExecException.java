@@ -1,6 +1,6 @@
 package jp.co.unirita.procon.exception;
 
-import jp.co.unirita.procon.result.Result;
+import jp.co.unirita.procon.core.Result;
 
 public class CommandExecException extends Exception {
 

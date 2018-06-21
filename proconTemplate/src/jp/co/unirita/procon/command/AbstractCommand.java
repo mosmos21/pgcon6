@@ -1,8 +1,8 @@
 package jp.co.unirita.procon.command;
 
 import jp.co.unirita.procon.core.Memory;
+import jp.co.unirita.procon.core.Result;
 import jp.co.unirita.procon.exception.CommandExecException;
-import jp.co.unirita.procon.result.Result;
 
 public abstract class AbstractCommand implements Command {
 

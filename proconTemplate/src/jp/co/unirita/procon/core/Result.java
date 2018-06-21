@@ -1,4 +1,4 @@
-package jp.co.unirita.procon.result;
+package jp.co.unirita.procon.core;
 
 public class Result {
 
