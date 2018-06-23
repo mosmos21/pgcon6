@@ -38,7 +38,7 @@ public abstract class AbstractCommand implements Command {
 	
 	protected boolean checkArgIdx(String[] args, int ordinal) {
 		int digit = String.valueOf(Memory.list.size()).length();
-		if(args.length < ordinal) {
+		if(args.length <= ordinal) {
 			return false;
 		}
 		if(digit < args[ordinal].length()) {
@@ -49,7 +49,7 @@ public abstract class AbstractCommand implements Command {
 	}
 	
 	protected boolean checkArgValue(String[] args, int ordinal) {
-		if(args.length < ordinal) {
+		if(args.length <= ordinal) {
 			return false;
 		}
 		if(2 < args[ordinal].length()) {
