@@ -1,5 +1,7 @@
 package jp.co.unirita.procon.list;
 
+import java.util.List;
+
 public abstract class AbstractVirtualList<T> implements VirtualList<T> {
 
 	private long size;
@@ -20,7 +22,7 @@ public abstract class AbstractVirtualList<T> implements VirtualList<T> {
 	public abstract T get(long idx);
 
 	@Override
-	public abstract T[] get(long startIdx, long endIdx);
+	public abstract List<T> get(long startIdx, long endIdx);
 
 	@Override
 	public abstract void add(long idx, T value);

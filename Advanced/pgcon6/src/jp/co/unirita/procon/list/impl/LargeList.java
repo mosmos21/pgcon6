@@ -1,6 +1,10 @@
 package jp.co.unirita.procon.list.impl;
 
+import java.util.List;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import jp.co.unirita.procon.list.AbstractVirtualList;
 
@@ -29,14 +33,11 @@ public class LargeList<T> extends AbstractVirtualList<T> {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public T[] get(long startIdx, long endIdx) {
-		Object[] arr = new Object[(int) (endIdx - startIdx) + 1];
-		for (int i = 0; i <= endIdx - startIdx; i++) {
-			arr[i] = this.get(startIdx + i);
-		}
-		return (T[]) arr;
+	public List<T> get(long startIdx, long endIdx) {
+		return LongStream.range(startIdx, endIdx + 1L)
+			.mapToObj(this::get)
+			.collect(Collectors.toList());
 	}
 
 	@Override

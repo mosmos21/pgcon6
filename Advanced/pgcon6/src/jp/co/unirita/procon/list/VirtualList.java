@@ -1,5 +1,7 @@
 package jp.co.unirita.procon.list;
 
+import java.util.List;
+
 public interface VirtualList<T> {
 	
 	// リスト全体のサイズを返す
@@ -12,7 +14,7 @@ public interface VirtualList<T> {
 	public T get(long idx);
 	
 	// 指定された範囲の値を配列で返す
-	public T[] get(long startIdx, long endIdx);
+	public List<T> get(long startIdx, long endIdx);
 	
 	// 指定された位置に値をセットする
 	public void add(long idx, T value);
